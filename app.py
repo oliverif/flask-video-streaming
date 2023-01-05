@@ -15,17 +15,18 @@ else:
 app = Flask(__name__)
 
 
-@app.route("/")
-def index():
+@app.route("/", defaults={"text": "default"})
+@app.route("/<text>")
+def index(text):
     """Video streaming home page."""
-    return render_template("index.html")
+    return render_template("index.html",text=text)
 
 
 @app.route("/", methods=["POST"])
 def index_post():
     text = request.form["text"]
     processed_text = text.upper()
-    return redirect(url_for("index"))
+    return redirect(url_for("index",text=text))
 
 
 def gen(camera):
@@ -36,10 +37,10 @@ def gen(camera):
         yield b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n--frame\r\n"
 
 
-@app.route("/video_feed", defaults={"text": "default"})
-def video_feed():
+@app.route("/video_feed/<text>")
+def video_feed(text):
     """Video streaming route. Put this in the src attribute of an img tag."""
-    print("video feed init")
+    print(f"video feed init {text}")
     cam = Camera()
     return Response(gen(cam), mimetype="multipart/x-mixed-replace; boundary=frame")
 
