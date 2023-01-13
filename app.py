@@ -15,18 +15,17 @@ else:
 app = Flask(__name__)
 
 
-@app.route("/", defaults={"text": "default"})
-@app.route("/<text>")
-def index(text):
+@app.route("/", methods=["POST", "GET"])
+def index():
     """Video streaming home page."""
-    return render_template("index.html",text=text)
-
-
-@app.route("/", methods=["POST"])
-def index_post():
-    text = request.form["text"]
-    processed_text = text.upper()
-    return redirect(url_for("index",text=text))
+    if request.method == "POST":
+        delay = int(request.data)
+        print(delay)
+        print(type(delay))
+        return render_template("index.html", delay=delay)
+    else:
+        delay = 0
+    return render_template("index.html", delay=delay)
 
 
 def gen(camera):
@@ -37,13 +36,19 @@ def gen(camera):
         yield b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n--frame\r\n"
 
 
-@app.route("/video_feed/<text>")
-def video_feed(text):
+@app.route("/video_feed/<delay>", methods=["POST", "GET"])
+def video_feed(delay):
     """Video streaming route. Put this in the src attribute of an img tag."""
-    print(f"video feed init {text}")
+    print(f"video feed init with {delay}")
     cam = Camera()
     return Response(gen(cam), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
+@app.route("/delay_change", methods=["POST"])
+def delay_change():
+    print(request.data)
+    return "yo"
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", threaded=True)
+    app.run(host="0.0.0.0", threaded=True, debug=True)

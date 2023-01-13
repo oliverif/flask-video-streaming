@@ -1,14 +1,32 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Video Streaming Demonstration</title>
   </head>
   <body>
     <h1>Video Streaming Demonstration</h1>
-    <img src="{{ url_for('video_feed',text=text) }}">
-    <form method="POST">
-      <input name="text">
-      <input type="submit">
+    <img src="{{ url_for('video_feed',delay=delay) }}">
+    <form method="POST" onsubmit="return false;">
+      <div id="delay_selector">
+        <input type="range" name="amountRange" min="0" max="20" value="0" oninput="this.form.amountInput.value=this.value" />
+        <input type="number" name="amountInput" id="amountInput" min="0" max="20" value="0" oninput="this.form.amountRange.value=this.value" />
+      </div>
     </form>
-    <p>Here is my variable: {{ text }}</p>
+
+    <script>
+      var delay;
+      const Http = new XMLHttpRequest();
+      var delaySelector = document.getElementById("delay_selector");
+      delaySelector.onchange = function(){changeDelay()};
+      function changeDelay(){
+        delay = document.getElementById("amountInput").value
+        console.log(delay)
+        Http.open('POST', '/video_feed/'+delay,true)
+        Http.send(delay)
+        document
+      };
+      <!--Mulig løsning om video_feed ikke oppdateres er å se om jeg kan bruke innerHTML for å resette img i html over-->
+
+      </script>
   </body>
 </html>
