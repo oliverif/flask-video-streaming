@@ -94,8 +94,8 @@ class BaseCamera(object):
         frames_iterator = cls.frames()
         for frame, t in frames_iterator:
             BaseCamera.frame = frame
-            BaseCamera.frameList.insert(0, (frame, time.time()))
-            if t - BaseCamera.frameList[-1][1] > BaseCamera.delay:
+            BaseCamera.frameList.insert(0, (frame, t))
+            if (time.time() - BaseCamera.frameList[-1][1]) * 1000 >= BaseCamera.delay:
                 BaseCamera.event.set()  # send signal to clients
             time.sleep(0)
 

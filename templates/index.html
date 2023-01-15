@@ -9,11 +9,12 @@
     <form method="POST" onsubmit="return false;">
       <div id="delay_selector">
         <label class="label">Playback delay</label>
-        <input type="number" name="amountInput" class="quantity" id="amountInput" min="0" max="2000" value="0" oninput="this.form.amountRange.value=this.value" />
-        <input type="range" name="amountRange" class="slider" min="0" max="2000" value="0" oninput="this.form.amountInput.value=this.value" />
+        <input type="number" name="amountInput" class="quantity" id="amountInput" min="0" max="5000" value="0" oninput="this.form.amountRange.value=this.value" />
+        <input type="range" name="amountRange" class="slider" min="0" max="5000" value="0" oninput="this.form.amountInput.value=this.value" />
       </div>
     </form>
     <img src="{{ url_for('video_feed',delay=delay) }}">
+    <iframe src="{{ url_for('video_feed',delay=delay) }}" class="frame"></iframe>
 
 
     <script>
