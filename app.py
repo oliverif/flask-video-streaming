@@ -40,7 +40,7 @@ def gen(camera):
 def video_feed(delay):
     """Video streaming route. Put this in the src attribute of an img tag."""
     print(f"video feed init with {delay}")
-    cam = Camera()
+    cam = Camera(delay)
     return Response(gen(cam), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
