@@ -7,7 +7,8 @@ from flask import Flask, render_template, Response, request, url_for, redirect
 if os.environ.get("CAMERA"):
     Camera = import_module("camera_" + os.environ["CAMERA"]).Camera
 else:
-    from camera_opencv import Camera
+    print("videostream")
+    from camera_videostream import Camera
 
 # Raspberry Pi camera module (requires picamera package)
 # from camera_pi import Camera

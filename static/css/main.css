@@ -1,3 +1,17 @@
+  div.imgbox {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 100px;
+    bottom: 0;
+    text-align: center;
+  }
+
+  img.feed {
+    width: 80%;
+    height: auto;
+  }
+
 .slider {
     -webkit-appearance: none;
     width: 80%;
@@ -45,20 +59,4 @@
     width: 10%;
     height: 15px;
   }
-
-  .frame {
-    width: 1200px;
-    height: 1800px;
-    border: 0;
-    -ms-transform: scale(0.25);
-    -moz-transform: scale(0.25);
-    -o-transform: scale(0.25);
-    -webkit-transform: scale(0.25);
-    transform: scale(0.25);
-
-    -ms-transform-origin: 0 0;
-    -moz-transform-origin: 0 0;
-    -o-transform-origin: 0 0;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-}
+  
