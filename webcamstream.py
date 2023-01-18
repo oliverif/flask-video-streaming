@@ -10,7 +10,7 @@ class WebcamVideoStream:
         self.stream = cv2.VideoCapture(src)
         (self.grabbed, self.frame) = self.stream.read()
 
-        self.img = cv2.imencode(".jpg", self.frame)[1].to_bytes()
+        self.img = cv2.imencode(".jpg", self.frame)[1].tobytes()
         # initialize the thread name
         self.name = name
 
@@ -23,9 +23,9 @@ class WebcamVideoStream:
         t = Thread(target=self.update, name=self.name, args=())
         t.daemon = True
         t.start()
-        t2 = Thread(target=self.encode, name="Encoder", args=())
-        t2.daemon = True
-        t2.start()
+        # t2 = Thread(target=self.encode, name="Encoder", args=())
+        # t2.daemon = True
+        # t2.start()
         return self
 
     def update(self):
@@ -42,11 +42,14 @@ class WebcamVideoStream:
         while True:
             if self.stopped:
                 return
-            self.img = cv2.imencode(".jpg", self.frame)[1].to_bytes()
+            self.img = cv2.imencode(".jpg", self.frame)[1].tobytes()
 
     def read(self):
         # return the frame most recently read
         return self.frame
+
+    def read_img(self):
+        return self.img
 
     def stop(self):
         # indicate that the thread should be stopped

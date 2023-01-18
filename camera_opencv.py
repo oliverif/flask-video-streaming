@@ -28,4 +28,5 @@ class Camera(BaseCamera):
             t = time.time()
             if success:
                 # encode as a jpeg image and return it
+                print(type(cv2.imencode(".jpg", img)[1].tobytes()))
                 yield cv2.imencode(".jpg", img)[1].tobytes(), t

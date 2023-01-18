@@ -73,9 +73,9 @@ class BaseCamera(object):
             # wait until first frame is available
             BaseCamera.event.wait()
 
-        if BaseCamera.encodeThread is None:
-            BaseCamera.thread = threading.Thread(target=self._encodeThread)
-            BaseCamera.thread.start()
+        # if BaseCamera.encodeThread is None:
+        #    BaseCamera.thread = threading.Thread(target=self._encodeThread)
+        #    BaseCamera.thread.start()
 
     def get_frame(self):
         """Return the current camera frame."""

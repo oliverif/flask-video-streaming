@@ -2,7 +2,7 @@ import os
 import cv2
 from base_camera import BaseCamera
 import time
-from imutils.video import VideoStream
+from webcamstream import WebcamVideoStream
 from threading import Thread
 
 
@@ -21,9 +21,17 @@ class Camera(BaseCamera):
 
     @staticmethod
     def frames():
-        camera = VideoStream(src=Camera.video_source, framerate=Camera.fps).start()
+        camera = WebcamVideoStream(src=Camera.video_source).start()
+        prev_time = time.time()
+        prev_img = camera.read_img()
         while True:
             # read current frame
-            img = camera.read()
+            img = camera.read_img()
             t = time.time()
-            yield cv2.imencode(".jpg", img)[1].tobytes(), t
+            if t - prev_time > 5:
+                prev_time = t
+                print(prev_img == img)
+                print(type(img))
+                prev_img = img
+
+            yield img, t
