@@ -8,7 +8,7 @@ if os.environ.get("CAMERA"):
     Camera = import_module("camera_" + os.environ["CAMERA"]).Camera
 else:
     print("videostream")
-    from camera_videostream import Camera
+    from camera_streamer import Camera
 
 # Raspberry Pi camera module (requires picamera package)
 # from camera_pi import Camera

@@ -5,6 +5,32 @@ from threading import Thread
 import cv2
 
 
+class FrameGetter:
+    """
+    Class that continuously gets frames from a VideoCapture object
+    with a dedicated thread.
+    """
+
+    def __init__(self, src=0):
+        self.stream = cv2.VideoCapture(src)
+        (self.grabbed, self.frame) = self.stream.read()
+        self.stopped = False
+
+    def start(self):
+        Thread(target=self.get, args=()).start()
+        return self
+
+    def get(self):
+        while not self.stopped:
+            if not self.grabbed:
+                self.stop()
+            else:
+                (self.grabbed, self.frame) = self.stream.read()
+
+    def stop(self):
+        self.stopped = True
+
+
 class FrameSender:
     """
     Class that continuously sends a frame using a dedicated thread.
@@ -13,6 +39,7 @@ class FrameSender:
     def __init__(self, frame=None):
         self.frame = frame
         self.stopped = False
+        self.img = None
 
     def start(self):
         Thread(target=self.show, args=()).start()
@@ -20,7 +47,7 @@ class FrameSender:
 
     def show(self):
         while not self.stopped:
-            cv2.imshow("Video", self.frame)
+            self.img = cv2.imencode(".jpg", self.frame)[1].tobytes()
             if cv2.waitKey(1) == ord("q"):
                 self.stopped = True
 
@@ -29,24 +56,29 @@ class FrameSender:
 
 
 class Camera:
-    """An emulated camera implementation that streams a repeated sequence of
-    files 1.jpg, 2.jpg and 3.jpg at a rate of one frame per second."""
+    frame = None
+    img = None
 
-    imgs = [open(f + ".jpg", "rb").read() for f in ["1", "2", "3"]]
+    def __init__(self, delay):
+        self.delay = delay
+        self.source = 0
 
-    @staticmethod
-    def frames():
-        frame_getter = FrameGetter(source).start()
+    def get_frame(self):
+        return self.frame
+
+    def frames(self):
+        frame_getter = FrameGetter(self.source).start()
         frame_sender = FrameSender(frame_getter.frame).start()
-        cps = CountsPerSec().start()
+        while frame_sender.img is None:
+            pass
+        self.img = frame_sender.img
 
         while True:
-            if video_getter.stopped or video_shower.stopped:
-                video_shower.stop()
-                video_getter.stop()
+            if frame_getter.stopped or frame_sender.stopped:
+                frame_sender.stop()
+                frame_getter.stop()
                 break
 
-            frame = video_getter.frame
-            frame = putIterationsPerSec(frame, cps.countsPerSec())
-            video_shower.frame = frame
-            cps.increment()
+            # frame_sender.frame = frame_getter.frame
+            # self.img = frame_sender.img
+            self.frame = cv2.imencode(".jpg", frame_getter.frame)[1].tobytes()
