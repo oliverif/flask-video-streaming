@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Swing Practice</title>
-  </head>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-  <body>
-    <h1>Swing Practice</h1>
-    <form method="POST" onsubmit="return false;">
-      <div id="delay_selector">
-        <label class="label">Playback delay</label>
-        <input type="number" name="amountInput" class="quantity" id="amountInput" min="0" max="5000" value="0" oninput="this.form.amountRange.value=this.value" />
-        <input type="range" name="amountRange" class="slider" min="0" max="5000" value="0" oninput="this.form.amountInput.value=this.value" />
-      </div>
-    </form>
-    <div class="imgbox">
-      <img class="feed" src="{{ url_for('video_feed',delay=delay) }}">
-    </div>
 
-    <script>
-      var delay;
-      const Http = new XMLHttpRequest();
-      var delaySelector = document.getElementById("delay_selector");
-      delaySelector.onchange = function(){changeDelay()};
-      function changeDelay(){
-        delay = document.getElementById("amountInput").value
-        console.log(delay)
-        Http.open('POST', '/video_feed/'+delay,true)
-        Http.send(delay)
-      };
-      </script>
-  </body>
+<head>
+  <title>Swing Practice</title>
+</head>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+<body>
+  <h1>Swing Practice</h1>
+  <form method="POST" onsubmit="return false;">
+    <div id="delay_selector">
+      <label class="label">Playback delay</label>
+      <input type="number" name="amountInput" class="quantity" id="amountInput" min="0" max="5000" value="0"
+        oninput="this.form.amountRange.value=this.value" />
+      <input type="range" name="amountRange" class="slider" min="0" max="5000" value="0"
+        oninput="this.form.amountInput.value=this.value" />
+    </div>
+  </form>
+  <div class="imgbox">
+    <img class="feed" src="{{ url_for('video_feed',delay=delay) }}">
+  </div>
+
+  <script>
+    var delay;
+    const Http = new XMLHttpRequest();
+    var delaySelector = document.getElementById("delay_selector");
+    delaySelector.onchange = function () { changeDelay() };
+    function changeDelay() {
+      delay = document.getElementById("amountInput").value
+      console.log(delay)
+      Http.open('POST', '/video_feed/' + delay, true)
+      Http.send(delay)
+    };
+  </script>
+</body>
+
 </html>

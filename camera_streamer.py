@@ -68,14 +68,14 @@ class Camera:
 
     def frames(self):
         frame_getter = FrameGetter(self.source).start()
-        frame_sender = FrameSender(frame_getter.frame).start()
-        while frame_sender.img is None:
-            pass
-        self.img = frame_sender.img
+        # frame_sender = FrameSender(frame_getter.frame).start()
+        # while frame_sender.img is None:
+        #    pass
+        # self.img = frame_sender.img
 
         while True:
-            if frame_getter.stopped or frame_sender.stopped:
-                frame_sender.stop()
+            if frame_getter.stopped:  # or frame_sender.stopped:
+                # frame_sender.stop()
                 frame_getter.stop()
                 break
 
